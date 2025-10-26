@@ -1,0 +1,117 @@
+# Iris Classifier (Keras + Streamlit)
+
+End-to-end mini project:
+- **Part 1–2**: Keras preprocessing + training, artifacts saved
+- **Part 3**: TensorBoard visualization (compare runs)
+- **Part 4**: KerasTuner Bayesian optimization
+- **Part 5**: Final evaluation (Confusion, ROC, PR)
+- **Part 6**: Streamlit app
+- **Part 7**: Packaging (this README + requirements)
+
+## 1) Project Structure
+
+.
+├─ artifacts_keras/
+│ ├─ scaler_X.pkl
+│ ├─ label_encoder_y.pkl
+│ ├─ onehot_encoder_y.pkl
+│ ├─ metadata.json
+│ ├─ model_keras.keras # baseline (Part 2)
+│ └─ model_keras_tuned.keras # tuned (Part 4) – optional
+├─ tb_logs_keras/ # TensorBoard logs (Part 3/4)
+├─ app.py # Streamlit app (Part 6)
+├─ IRIS.csv # dataset
+├─ requirements.txt # (Part 7)
+└─ README.md # (Part 7)
+
+
+> If you trained in a notebook, copy generated artifacts to `artifacts_keras/`.
+
+## 2) Environment Setup
+
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
+
+pip install --upgrade pip
+pip install -r requirements.txt
+
+Apple Silicon (M-series)
+
+If tensorflow install fails:
+
+pip uninstall -y tensorflow
+pip install "tensorflow-macos>=2.13,<3.0"
+
+3) Data
+
+Place IRIS.csv in the repo root (or update DATA_PATH in the notebook).
+The code auto-detects the target column name from common variants (species, class, etc.).
+4) Train & Tune (Notebooks / Cells)
+
+Run Parts 1 → 4 in Jupyter/Colab:
+
+    Part 1: load IRIS, split, scale, encode; saves:
+
+        artifacts_keras/scaler_X.pkl
+
+        artifacts_keras/label_encoder_y.pkl
+
+        artifacts_keras/onehot_encoder_y.pkl
+
+        artifacts_keras/metadata.json
+
+    Part 2: Keras MLP, early stopping; saves:
+
+        artifacts_keras/model_keras.keras
+
+    Part 3: TensorBoard comparisons:
+
+        logs under tb_logs_keras/…
+
+    Part 4: KerasTuner (Bayesian). Optionally save tuned model as:
+
+        artifacts_keras/model_keras_tuned.keras
+
+5) Visualize with TensorBoard
+
+# From project root:
+tensorboard --logdir tb_logs_keras
+# Open the shown URL in your browser and select runs to compare.
+
+6) Run the Streamlit App
+
+streamlit run app.py
+
+    The app loads:
+
+        Model: artifacts_keras/model_keras_tuned.keras (or model_keras.keras)
+
+        Scaler/label encoder from pickle
+
+        Features order from metadata.json
+
+    Enter four numeric features → get class + probabilities.
+
+7) Common Issues & Fixes
+
+    TensorFlow install fails (Windows)
+    Update pip/wheels: pip install --upgrade pip setuptools wheel.
+
+    Apple Silicon
+    Use tensorflow-macos instead of tensorflow.
+
+    Shapes mismatch
+    Ensure the Streamlit input columns match metadata.json["feature_columns"].
+
+    Wrong class names
+    App uses label_encoder_y.pkl. If you retrain, re-export all artifacts.
+
+8) Reproducibility
+
+    Seeds set in code: RANDOM_SEED=42 for NumPy & TF.
+
+    Still expect small variance across runs due to non-deterministic kernels.
+    For stricter reproducibility, pin exact package versions.
