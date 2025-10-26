@@ -1,11 +1,11 @@
+--only-binary=:all:
 numpy==1.26.4
-pandas==2.2.2
+pandas==2.2.3
 scikit-learn==1.4.2
 matplotlib==3.8.4
 streamlit==1.36.0
 tensorboard==2.17.1
 tensorflow-cpu==2.17.1
-keras-tuner==1.4.7
 protobuf==4.25.3
 grpcio==1.62.2
 h5py==3.11.0
